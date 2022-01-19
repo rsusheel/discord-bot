@@ -205,6 +205,8 @@ async def info(ctx, crr: str):
 async def chart(ctx, crr: str):
   # captureScreenshot(crr)
   driver = webdriver.Chrome(execution_path=CHROMEDRIVER_PATH, chrome_options=chrome_options)
+  url="https://www.tradingview.com/chart/?symbol=BINANCE%3A"+crr.upper()+"USDT"
+  driver.get(url)
   a=driver.page_source
   # await ctx.send(file=discord.File('images/screenshot.png'))
   await ctx.send(a)
