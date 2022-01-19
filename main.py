@@ -29,7 +29,7 @@ db=TinyDB('symbols.json')
 user=Query()
 
 
-GOOGLE_CHROME_PATH = '/app/.apt/opt/google/chrome/google_chrome'
+GOOGLE_CHROME_PATH = '/app/.apt/opt/google/chrome/google-chrome'
 CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
 
 chrome_options = webdriver.ChromeOptions()
