@@ -204,7 +204,7 @@ async def info(ctx, crr: str):
 @bot.command()
 async def chart(ctx, crr: str):
   # captureScreenshot(crr)
-  driver = webdriver.Chrome(execution_path=CHROMEDRIVER_PATH, chrome_options=chrome_options)
+  driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=chrome_options)
   url="https://www.tradingview.com/chart/?symbol=BINANCE%3A"+crr.upper()+"USDT"
   driver.get(url)
   a=driver.page_source
@@ -260,7 +260,7 @@ async def sip(ctx, monthly: int, time: int, interest: int, principle: int):
 
 
 @bot.command()
-async def insult(ctx):
+async def insul(ctx):
   url="https://evilinsult.com/generate_insult.php?lang=en&type=json"
   response = requests.get(url)
   jsonData = json.loads(response.text)
