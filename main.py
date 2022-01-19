@@ -212,8 +212,7 @@ async def chart(ctx, crr: str):
   # url="https://www.tradingview.com/chart/?symbol=BINANCE%3A"+crr.upper()+"USDT"
   # driver.get(url)
   # a=driver.page_source
-  # await ctx.send(file=discord.File('images/screenshot.png'))
-  await ctx.send(a)
+  await ctx.send(file=discord.File('images/screenshot.png'))
 
 
 @bot.command()
