@@ -35,6 +35,8 @@ CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--disable-gpu')
 chrome_options.add_argument('--no-sandbox')
+chrome_options.add_argument("--headless")
+chrome_options.add_argument("--disable-dev-shm-usage")
 chrome_options.binary_location = GOOGLE_CHROME_PATH
 
 ################### LIST OF FUNCTIONS ###################
@@ -45,8 +47,7 @@ chrome_options.binary_location = GOOGLE_CHROME_PATH
 def captureScreenshot(currency):
 
   # driver initialization
-  # driver = webdriver.Chrome(os.getcwd()+"\chromedriver.exe")
-  driver = webdriver.Chrome(execution_path=CHROMEDRIVER_PATH, chrome_options=chrome_options)
+  driver = webdriver.Chrome(os.getcwd()+"\chromedriver.exe")
 
   # access web page
   url="https://www.tradingview.com/chart/?symbol=BINANCE%3A"+currency.upper()+"USDT"
@@ -202,8 +203,11 @@ async def info(ctx, crr: str):
 # USE: 'ci [currency_name/currency_symbol]'
 @bot.command()
 async def chart(ctx, crr: str):
-  captureScreenshot(crr)
-  await ctx.send(file=discord.File('images/screenshot.png'))
+  # captureScreenshot(crr)
+  driver = webdriver.Chrome(execution_path=CHROMEDRIVER_PATH, chrome_options=chrome_options)
+  a=driver.page_source
+  # await ctx.send(file=discord.File('images/screenshot.png'))
+  await ctx.send(a)
 
 
 @bot.command()
