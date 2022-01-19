@@ -188,7 +188,7 @@ def historicalData(crr, days):
 ################### BOT COMMANDS ###################
 
 # set the bot command prefix, PREFIX: 'c'
-bot = commands.Bot(command_prefix='/')
+bot = commands.Bot(command_prefix='c')
 
 
 # COMMAND: 'c'
@@ -196,7 +196,7 @@ bot = commands.Bot(command_prefix='/')
 # INFO: creates an embed and sends as response to the command
 # USE: 'cc [currency_name/surrency_symbol]'
 @bot.command()
-async def info(ctx, crr: str):
+async def c(ctx, crr: str):
   embed=createEmbed(crr)
   await ctx.send(embed=embed)
 
@@ -206,7 +206,7 @@ async def info(ctx, crr: str):
 # INFO: fetches the screenshot from captureScreenshot function and sends the image as response fro the command
 # USE: 'ci [currency_name/currency_symbol]'
 @bot.command()
-async def chart(ctx, crr: str):
+async def i(ctx, crr: str):
   captureScreenshot(crr)
   # driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=chrome_options)
   # url="https://www.tradingview.com/chart/?symbol=BINANCE%3A"+crr.upper()+"USDT"
@@ -216,7 +216,7 @@ async def chart(ctx, crr: str):
 
 
 @bot.command()
-async def hist(ctx, crr: str, days: str):
+async def r(ctx, crr: str, days: str):
   crrid=db.search(user.symbol==crr)[0]["id"]
   dataJson=historicalData(crrid, days)
   roi="{:,}".format(round(dataJson["roi"],2))+"%"
@@ -240,7 +240,7 @@ async def hist(ctx, crr: str, days: str):
 # INFO: calculates average maturity amount for certain mutual funds parameters
 # USE: 'cmf [monthly | time | interest | principle]'
 @bot.command()
-async def sip(ctx, monthly: int, time: int, interest: int, principle: int):
+async def mf(ctx, monthly: int, time: int, interest: int, principle: int):
   # formula from: 'https://www.thecalculatorsite.com/articles/finance/compound-interest-formula.php'
   # Future value of series: PMT × {[(1 + r/n)^(nt) - 1] / (r/n)}
   # CI for principle: P(1+r/n)^(nt)
@@ -263,7 +263,7 @@ async def sip(ctx, monthly: int, time: int, interest: int, principle: int):
 
 
 @bot.command()
-async def insul(ctx):
+async def insult(ctx):
   url="https://evilinsult.com/generate_insult.php?lang=en&type=json"
   response = requests.get(url)
   jsonData = json.loads(response.text)
@@ -275,7 +275,7 @@ async def insul(ctx):
 async def cointelegraph():
   tt=datetime.datetime.now().timestamp()
   lastUpdated=tt-1800
-  ch=bot.get_channel(924979491409911838)
+  ch=bot.get_channel(933421611825102869)
   url="https://rss-to-json-serverless-api.vercel.app/api?feedURL=https://cointelegraph.com/rss"
   response = requests.get(url)
   for i in range(len(json.loads(response.text)["items"])):
