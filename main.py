@@ -64,11 +64,11 @@ def captureScreenshot(currency):
 
   # web page auto clicks
   driver.find_element_by_class_name('content-1UNGmyXO').click()     # remove cookies box
-  time.sleep(5)                                                     # sleep for 5 sec to let page load
+  time.sleep(2)                                                     # sleep for 5 sec to let page load
   driver.find_element_by_class_name('button-2WfzAPA-').click()      # click on menu button
   driver.find_element_by_class_name('switcher-2WfzAPA-').click()    # click on dark mode
   driver.find_element_by_class_name('button-2WfzAPA-').click()      # click on menu button
-  time.sleep(1)                                                     # sleep for 1 sec to let the screenshot take
+  # time.sleep(1)                                                     # sleep for 1 sec to let the screenshot take
 
   # capture screenshot and save the image as 'image.png' and close the browser
   driver.save_screenshot("images/image.png")
