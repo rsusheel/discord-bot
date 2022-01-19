@@ -58,13 +58,13 @@ def captureScreenshot(currency):
   driver.get(url)
 
   # web browser placement
-  driver.execute_script("document.body.style.zoom='100%'")
+  driver.execute_script("document.body.style.zoom='120%'")
   driver.set_window_size(1920,1080,driver.window_handles[0])
   driver.maximize_window()
 
   # web page auto clicks
   driver.find_element_by_class_name('content-1UNGmyXO').click()     # remove cookies box
-  time.sleep(2)                                                     # sleep for 5 sec to let page load
+  time.sleep(1)                                                     # sleep for 5 sec to let page load
   driver.find_element_by_class_name('button-2WfzAPA-').click()      # click on menu button
   driver.find_element_by_class_name('switcher-2WfzAPA-').click()    # click on dark mode
   driver.find_element_by_class_name('button-2WfzAPA-').click()      # click on menu button
