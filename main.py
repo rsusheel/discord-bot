@@ -58,7 +58,7 @@ def captureScreenshot(currency):
   driver.get(url)
 
   # web browser placement
-  driver.execute_script("document.body.style.zoom='120%'")
+  driver.execute_script("document.body.style.zoom='100%'")
   driver.set_window_size(1920,1080,driver.window_handles[0])
   driver.maximize_window()
 
