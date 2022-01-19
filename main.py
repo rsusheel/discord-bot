@@ -8,6 +8,7 @@
 # importing libraries
 from calendar import month
 from dis import disco
+from lib2to3.pgen2 import driver
 import discord                                      # discord API
 from discord.ext import commands, tasks             # to use bot commands
 import os                                           # to access OS file system
@@ -28,6 +29,14 @@ db=TinyDB('symbols.json')
 user=Query()
 
 
+GOOGLE_CHROME_PATH = '/app/.apt/usr/bin/google_chrome'
+CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
+
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument('--disable-gpu')
+chrome_options.add_argument('--no-sandbox')
+chrome_options.binary_location = GOOGLE_CHROME_PATH
+
 ################### LIST OF FUNCTIONS ###################
 
 # FUNCTION: captureScreenshot
@@ -36,7 +45,8 @@ user=Query()
 def captureScreenshot(currency):
 
   # driver initialization
-  driver = webdriver.Chrome(os.getcwd()+"\chromedriver.exe")
+  # driver = webdriver.Chrome(os.getcwd()+"\chromedriver.exe")
+  driver = webdriver.Chrome(execution_path=CHROMEDRIVER_PATH, chrome_options=chrome_options)
 
   # access web page
   url="https://www.tradingview.com/chart/?symbol=BINANCE%3A"+currency.upper()+"USDT"
