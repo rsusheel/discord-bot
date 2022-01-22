@@ -6,14 +6,10 @@
 ################### BOT ###################
 
 # importing libraries
-from calendar import month
-from dis import disco
-from lib2to3.pgen2 import driver
 from turtle import title
 import discord                                      # discord API
 from discord.ext import commands, tasks             # to use bot commands
-import os
-from h11 import Response                                           # to access OS file system
+import os                                           # to access OS file system
 import requests                                     # to send HTTP requests
 import json                                         # to process JSON files
 import time                                         # for sleep delay
@@ -439,7 +435,7 @@ fourminx.start()
 async def fourmin():
   crr=["bitcoin", "ethereum", "cardano", "matic-network", "polkadot"]
   priceAll=["na","na","na","na","na"]
-  ch=bot.get_channel(934422987610935318)
+  
   for i in range(5):
     url="https://api.coingecko.com/api/v3/simple/price?ids="+crr[i]+"&vs_currencies=usd"
     response=requests.get(url)
@@ -456,8 +452,8 @@ async def fourmin():
       str+="**"+crr[i][0].upper()+crr[i][1:]+":** "+priceAll[i]+"\n\n"
   
   embed.description=str
-
-  msg = await ch.fetch_message(934438134614216704)
+  ch=bot.get_channel(934422987610935318)
+  msg = await ch.fetch_message(934443021502668811)
   await msg.edit(embed=embed)
   # await ch.send(embed=embed)
 
