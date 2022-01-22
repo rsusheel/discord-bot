@@ -384,7 +384,7 @@ bitcoinmagazine.start()
 @tasks.loop(minutes=30)
 async def cryptoslate():
   tt=datetime.datetime.now().timestamp()
-  lastUpdated=tt-180000
+  lastUpdated=tt-1800
   ch=bot.get_channel(feedsChannel)
   url="https://rss-to-json-serverless-api.vercel.app/api?feedURL=https://cryptoslate.com/products/feed/"
   response = requests.get(url)
