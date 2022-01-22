@@ -450,7 +450,10 @@ async def fourmin():
   embed.colour = 0xF1C40F
   str=''
   for i in range(5):
-    str+="**"+crr[i][0].upper()+crr[i][1:]+":** "+priceAll[i]+"\n\n"
+    if crr[i]=="matic-network":
+      str+="**"+"Polygon"+":** "+priceAll[i]+"\n\n"
+    else:
+      str+="**"+crr[i][0].upper()+crr[i][1:]+":** "+priceAll[i]+"\n\n"
   
   embed.description=str
 
