@@ -6,7 +6,6 @@
 ################### BOT ###################
 
 # importing libraries
-from turtle import title
 import discord                                      # discord API
 from discord.ext import commands, tasks             # to use bot commands
 import os                                           # to access OS file system
