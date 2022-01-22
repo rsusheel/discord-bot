@@ -9,9 +9,11 @@
 from calendar import month
 from dis import disco
 from lib2to3.pgen2 import driver
+from turtle import title
 import discord                                      # discord API
 from discord.ext import commands, tasks             # to use bot commands
-import os                                           # to access OS file system
+import os
+from h11 import Response                                           # to access OS file system
 import requests                                     # to send HTTP requests
 import json                                         # to process JSON files
 import time                                         # for sleep delay
@@ -271,11 +273,13 @@ async def insult(ctx):
   await ctx.send(insult)
 
 
+feedsChannel=933421611825102869
+
 @tasks.loop(minutes=30)
 async def cointelegraph():
   tt=datetime.datetime.now().timestamp()
   lastUpdated=tt-1800
-  ch=bot.get_channel(933421611825102869)
+  ch=bot.get_channel(feedsChannel)
   url="https://rss-to-json-serverless-api.vercel.app/api?feedURL=https://cointelegraph.com/rss"
   response = requests.get(url)
   for i in range(len(json.loads(response.text)["items"])):
@@ -311,7 +315,7 @@ cointelegraph.start()
 async def newsbtc():
   tt=datetime.datetime.now().timestamp()
   lastUpdated=tt-1800
-  ch=bot.get_channel(933421611825102869)
+  ch=bot.get_channel(feedsChannel)
   url="https://rss-to-json-serverless-api.vercel.app/api?feedURL=https://www.newsbtc.com/feed/"
   response = requests.get(url)
   for i in range(len(json.loads(response.text)["items"])):
@@ -345,8 +349,8 @@ newsbtc.start()
 @tasks.loop(minutes=30)
 async def bitcoinmagazine():
   tt=datetime.datetime.now().timestamp()
-  lastUpdated=tt-180000
-  ch=bot.get_channel(933421611825102869)
+  lastUpdated=tt-1800
+  ch=bot.get_channel(feedsChannel)
   url="https://rss-to-json-serverless-api.vercel.app/api?feedURL=https://bitcoinmagazine.com/.rss/full/"
   response = requests.get(url)
   for i in range(len(json.loads(response.text)["items"])):
@@ -361,8 +365,8 @@ async def bitcoinmagazine():
     image=jsonData["enclosures"][0]["url"]
     soup=BeautifulSoup(description, "html.parser")
     embed=discord.Embed(title=title, url=link)
-    embed.set_author(name="Bitcoin Magazine", url="https://www.bitcoinmagazine.com", icon_url="/images/bitcoinmagazine.jpg")
-    embed.description=str(soup)[3:-4]
+    embed.set_author(name="Bitcoin Magazine", url="https://www.bitcoinmagazine.com", icon_url="https://raw.githubusercontent.com/rsusheel/discord-bot/master/images/bitcoinmagazine.jpg")
+    embed.description=str(soup)
     embed.set_image(url=image)
     embed.colour = 0xF1C40F
     footer="By "+author+" ("+datetime.datetime.fromtimestamp(timestamp).strftime("%d %B, %Y, %H:%M")+" GMT)"
@@ -375,6 +379,91 @@ async def before():
     print("Finished waiting for Bitcoin Magazine")
 
 bitcoinmagazine.start()
+
+
+@tasks.loop(minutes=30)
+async def cryptoslate():
+  tt=datetime.datetime.now().timestamp()
+  lastUpdated=tt-180000
+  ch=bot.get_channel(feedsChannel)
+  url="https://rss-to-json-serverless-api.vercel.app/api?feedURL=https://cryptoslate.com/products/feed/"
+  response = requests.get(url)
+  for i in range(len(json.loads(response.text)["items"])):
+    jsonData = json.loads(response.text)["items"][i]
+    timestamp=int(str(jsonData["published"])[0:-3])
+    if timestamp<lastUpdated:
+      break
+    title=jsonData["title"]
+    link=jsonData["link"]
+    author=jsonData["author"].replace(",",", ")
+    description=jsonData["description"]
+    soup=BeautifulSoup(description, "html.parser")
+    soup=soup.find_all('p')[0]
+    embed=discord.Embed(title=title, url=link)
+    embed.set_author(name="Crypto Slate", url="https://www.cryptoslate.com", icon_url="https://cryptoslate.com/wp-content/themes/cryptoslate-2020/icons/android-icon-192x192.png")
+    embed.description=str(soup)[3:-4]
+    embed.colour = 0xF1C40F
+    footer="By "+author+" ("+datetime.datetime.fromtimestamp(timestamp).strftime("%d %B, %Y, %H:%M")+" GMT)"
+    embed.set_footer(text=footer)
+    await ch.send(embed=embed)
+
+@cryptoslate.before_loop
+async def before():
+    await bot.wait_until_ready()
+    print("Finished waiting for Crypto Slate")
+
+cryptoslate.start()
+
+
+@tasks.loop(minutes=4)
+async def fourminx():
+  ch=bot.get_channel(934422987610935318)
+  embed=discord.Embed(title="Current Prices")
+  embed.colour = 0xF1C40F
+  dt_India = datetime.datetime.utcnow() + datetime.timedelta(hours=5, minutes=30)
+  Indian_time = dt_India.strftime('%d %B, %Y, %H:%M') + " IST"
+  embed.set_footer(text=Indian_time)
+
+  msg = await ch.fetch_message(934443019267112960)
+  await msg.edit(embed=embed)
+
+@fourminx.before_loop
+async def before():
+    await bot.wait_until_ready()
+    print("Real time looping started for every 4 min (time updates)")
+
+fourminx.start()
+
+
+@tasks.loop(minutes=4)
+async def fourmin():
+  crr=["bitcoin", "ethereum", "cardano", "matic-network", "polkadot"]
+  priceAll=["na","na","na","na","na"]
+  ch=bot.get_channel(934422987610935318)
+  for i in range(5):
+    url="https://api.coingecko.com/api/v3/simple/price?ids="+crr[i]+"&vs_currencies=usd"
+    response=requests.get(url)
+    price=json.loads(response.text)[crr[i]]["usd"]
+    priceAll[i]="{:,}".format(price) + " USD"
+  
+  embed=discord.Embed()
+  embed.colour = 0xF1C40F
+  str=''
+  for i in range(5):
+    str+="**"+crr[i][0].upper()+crr[i][1:]+":** "+priceAll[i]+"\n\n"
+  
+  embed.description=str
+
+  msg = await ch.fetch_message(934438134614216704)
+  await msg.edit(embed=embed)
+  # await ch.send(embed=embed)
+
+@fourmin.before_loop
+async def before():
+    await bot.wait_until_ready()
+    print("Real time looping started for every 4 min")
+
+fourmin.start()
 
 ################### RUN THE BOT ###################
 token=os.environ.get("BOT_TOKEN")
