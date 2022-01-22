@@ -302,9 +302,79 @@ async def cointelegraph():
 @cointelegraph.before_loop
 async def before():
     await bot.wait_until_ready()
-    print("Finished waiting")
+    print("Finished waiting for Cointelegraph")
 
 cointelegraph.start()
+
+
+@tasks.loop(minutes=30)
+async def newsbtc():
+  tt=datetime.datetime.now().timestamp()
+  lastUpdated=tt-1800
+  ch=bot.get_channel(933421611825102869)
+  url="https://rss-to-json-serverless-api.vercel.app/api?feedURL=https://www.newsbtc.com/feed/"
+  response = requests.get(url)
+  for i in range(len(json.loads(response.text)["items"])):
+    jsonData = json.loads(response.text)["items"][i]
+    timestamp=int(str(jsonData["published"])[0:-3])
+    if timestamp<lastUpdated:
+      break
+    title=jsonData["title"]
+    link=jsonData["link"]
+    author=jsonData["author"]
+    description=jsonData["description"]
+    image=jsonData["enclosures"][0]["url"]
+    soup=BeautifulSoup(description, "html.parser")
+    embed=discord.Embed(title=title, url=link)
+    embed.set_author(name="NewsBTC", url="https://www.newsbtc.com/", icon_url="https://www.newsbtc.com/wp-content/uploads/2020/06/cropped-cropped-cropped-favicon-192x192.png")
+    embed.description=str(soup)[:200].replace("&#8217;", "'").replace("&#124;", "|").replace("&#8211;","-").replace("&#8221;",'”').replace("&#8212;","—").replace("&#38;","&") + "..."
+    embed.set_image(url=image)
+    embed.colour = 0xF1C40F
+    footer="By "+author+" ("+datetime.datetime.fromtimestamp(timestamp).strftime("%d %B, %Y, %H:%M")+" GMT)"
+    embed.set_footer(text=footer)
+    await ch.send(embed=embed)
+
+@newsbtc.before_loop
+async def before():
+    await bot.wait_until_ready()
+    print("Finished waiting for NewsBTC")
+
+newsbtc.start()
+
+
+@tasks.loop(minutes=30)
+async def bitcoinmagazine():
+  tt=datetime.datetime.now().timestamp()
+  lastUpdated=tt-180000
+  ch=bot.get_channel(933421611825102869)
+  url="https://rss-to-json-serverless-api.vercel.app/api?feedURL=https://bitcoinmagazine.com/.rss/full/"
+  response = requests.get(url)
+  for i in range(len(json.loads(response.text)["items"])):
+    jsonData = json.loads(response.text)["items"][i]
+    timestamp=int(str(jsonData["published"])[0:-3])
+    if timestamp<lastUpdated:
+      break
+    title=jsonData["title"]
+    link=jsonData["link"]
+    author=jsonData["author"].replace(",",", ")
+    description=jsonData["description"]
+    image=jsonData["enclosures"][0]["url"]
+    soup=BeautifulSoup(description, "html.parser")
+    embed=discord.Embed(title=title, url=link)
+    embed.set_author(name="Bitcoin Magazine", url="https://www.bitcoinmagazine.com", icon_url="/images/bitcoinmagazine.jpg")
+    embed.description=str(soup)[3:-4]
+    embed.set_image(url=image)
+    embed.colour = 0xF1C40F
+    footer="By "+author+" ("+datetime.datetime.fromtimestamp(timestamp).strftime("%d %B, %Y, %H:%M")+" GMT)"
+    embed.set_footer(text=footer)
+    await ch.send(embed=embed)
+
+@bitcoinmagazine.before_loop
+async def before():
+    await bot.wait_until_ready()
+    print("Finished waiting for Bitcoin Magazine")
+
+bitcoinmagazine.start()
 
 ################### RUN THE BOT ###################
 token=os.environ.get("BOT_TOKEN")
