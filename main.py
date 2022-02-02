@@ -419,8 +419,9 @@ async def fourminx():
   Indian_time = dt_India.strftime('%d %B, %Y, %H:%M') + " IST"
   embed.set_footer(text=Indian_time)
 
-  msg = await ch.fetch_message(934443019267112960)
+  msg = await ch.fetch_message(938346964200853554)
   await msg.edit(embed=embed)
+  # await ch.send(embed=embed)
 
 @fourminx.before_loop
 async def before():
@@ -452,7 +453,7 @@ async def fourmin():
   
   embed.description=str
   ch=bot.get_channel(934422987610935318)
-  msg = await ch.fetch_message(934443021502668811)
+  msg = await ch.fetch_message(938346966281252905)
   await msg.edit(embed=embed)
   # await ch.send(embed=embed)
 
